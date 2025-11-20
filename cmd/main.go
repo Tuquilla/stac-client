@@ -30,17 +30,17 @@ func main() {
 
 	canvasObjects = append(canvasObjects, text1, text2, text3, text4)
 
-	content_bottom := container.New(layout.NewGridLayout(2), canvasObjects...)
+	contentBottom := container.New(layout.NewGridLayout(2), canvasObjects...)
 
-	button_generate := widget.NewButton("click me", func() {
-		content_bottom.Objects = []fyne.CanvasObject{canvas.NewText("Part4", color.White), canvas.NewText("Part5", color.White)}
-		content_bottom.Refresh()
+	buttonGenerate := widget.NewButton("click me", func() {
+		contentBottom.Objects = []fyne.CanvasObject{canvas.NewText("Part4", color.White), canvas.NewText("Part5", color.White)}
+		contentBottom.Refresh()
 		stac.TestStac()
 	})
 
-	content_top := container.New(layout.NewGridLayout(1), button_generate)
+	contentTop := container.New(layout.NewGridLayout(1), buttonGenerate)
 
-	content := container.New(layout.NewGridLayout(1), content_top, content_bottom)
+	content := container.New(layout.NewGridLayout(1), contentTop, contentBottom)
 
 	myWindow.SetContent(content)
 
