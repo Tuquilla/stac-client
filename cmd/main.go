@@ -16,22 +16,16 @@ func main() {
 	myApp := app.New()
 	myWindow := myApp.NewWindow("geodienst-cli")
 	myWindow.SetContent(widget.NewLabel("geodienste-cli2"))
-	myWindow.Resize(fyne.NewSize(300, 600))
+	myWindow.Resize(fyne.NewSize(1050, 400))
 
-	canvasObjects := []fyne.CanvasObject{}
-	//green := color.NRGBA{R: 0, G: 180, B: 0, A: 255}
-	//text1 := canvas.NewText("Part1", green)
-	//text2 := canvas.NewText("Part2", green)
-	//text3 := canvas.NewText("Part3", color.White)
-	//text4 := canvas.NewText("Part4", color.White)
-	//
-	//canvasObjects = append(canvasObjects, text1, text2, text3, text4)
+	var canvasObjects []fyne.CanvasObject
 
-	contentBottom := container.New(layout.NewGridLayout(4), canvasObjects...)
+	contentBottom := container.New(layout.NewGridWrapLayout(fyne.Size{Width: 200, Height: 125}), canvasObjects...)
+	contentBottomWrapper := container.NewVScroll(contentBottom)
 
 	buttonGenerate := widget.NewButton("click me", func() {
 		collections := stac.GetCollections()
-		collectionObjects := []fyne.CanvasObject{}
+		var collectionObjects []fyne.CanvasObject
 
 		for _, element := range collections.Collections {
 			collectionObjects = append(collectionObjects, gui.CollectionButton(element, contentBottom))
@@ -41,9 +35,9 @@ func main() {
 		contentBottom.Refresh()
 	})
 
-	contentTop := container.New(layout.NewGridLayout(1), buttonGenerate)
+	contentTop := container.New(layout.NewGridLayout(2), buttonGenerate)
 
-	content := container.New(layout.NewGridLayout(1), contentTop, contentBottom)
+	content := container.NewBorder(contentTop, nil, nil, nil, contentBottomWrapper)
 
 	myWindow.SetContent(content)
 

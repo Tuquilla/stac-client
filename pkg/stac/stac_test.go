@@ -30,6 +30,6 @@ func TestCreateFeatureCollection(t *testing.T) {
 	_, assetKeyExists := firstAssets[assetObjectKey]
 
 	if assetKeyExists != true {
-		t.Errorf("AssetObject %s does not exist", assetObjectKey)
+		t.Errorf("AssetObject key %s does not exist", assetObjectKey)
 	}
 }

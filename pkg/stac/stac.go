@@ -24,15 +24,24 @@ func GetCollections() models.Collections {
 	}
 
 	collections := createCollections(body)
-	for _, collection := range collections.Collections {
-		fmt.Println(collection.Id)
-	}
+
 	return collections
 }
 
-//func GetItems() models.Items {
-//
-//}
+func GetItems(itemUrl string) models.FeatureCollection {
+	resp, err := http.Get(itemUrl)
+	if err != nil {
+		fmt.Println("Error calling service")
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Error reading Response Body")
+	}
+	featureCollection := createFeatureCollection(body)
+	return featureCollection
+}
 
 func createCollections(body []byte) models.Collections {
 	var collections models.Collections
