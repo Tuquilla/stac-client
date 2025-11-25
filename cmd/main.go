@@ -23,19 +23,28 @@ func main() {
 	contentBottom := container.New(layout.NewGridWrapLayout(fyne.Size{Width: 200, Height: 125}), canvasObjects...)
 	contentBottomWrapper := container.NewVScroll(contentBottom)
 
+	var collectionObjects []fyne.CanvasObject
+	var masterObjects []fyne.CanvasObject
 	buttonGenerate := widget.NewButton("click me", func() {
 		collections := stac.GetCollections()
-		var collectionObjects []fyne.CanvasObject
 
 		for _, element := range collections.Collections {
 			collectionObjects = append(collectionObjects, gui.CollectionButton(element, contentBottom))
 		}
 
 		contentBottom.Objects = collectionObjects
+		masterObjects := collectionObjects
 		contentBottom.Refresh()
 	})
 
-	contentTop := container.New(layout.NewGridLayout(2), buttonGenerate)
+	inputBar := widget.NewEntry()
+	inputBar.SetPlaceHolder("Enter text...")
+	inputBar.OnChanged = func(text string) {
+		_ := collectionObjects
+		fmt.Println(text)
+	}
+
+	contentTop := container.New(layout.NewGridLayout(2), buttonGenerate, inputBar)
 
 	content := container.NewBorder(contentTop, nil, nil, nil, contentBottomWrapper)
 
@@ -48,4 +57,8 @@ func main() {
 
 func tidyUp() {
 	fmt.Println("Exited")
+}
+
+func filterObjects(canvasObjects *fyne.CanvasObject) {
+
 }
