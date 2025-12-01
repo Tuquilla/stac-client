@@ -22,11 +22,18 @@ func main() {
 	myWindow.SetContent(widget.NewLabel("geodienste-cli2"))
 	myWindow.Resize(fyne.NewSize(1050, 400))
 
-	stateBindings := binding.NewUntypedList()
+	stateBindings := models.State{
+		CompleteList: binding.NewUntypedList(),
+		FilteredList: binding.NewUntypedList(),
+		Search:       binding.NewString(),
+	}
+
 	contentBottom := newMainFrame(stateBindings)
 	contentBottomWrapper := container.NewVScroll(contentBottom)
 
 	var collectionObjects []fyne.CanvasObject
+
+	var collections models.Collections
 
 	// Search bar text
 	inputBar := widget.NewEntry()
@@ -37,12 +44,13 @@ func main() {
 	}
 
 	buttonGenerate := widget.NewButton("click me", func() {
-		collections := stac.GetCollections()
+		collections = stac.GetCollections()
 		items := make([]interface{}, len(collections.Collections))
 		for i, c := range collections.Collections {
 			items[i] = c
 		}
-		stateBindings.Set(items)
+		stateBindings.CompleteList.Set(items)
+		stateBindings.FilteredList.Set(items)
 	})
 
 	contentTop := container.New(layout.NewGridLayout(2), buttonGenerate, inputBar)
@@ -60,13 +68,13 @@ func tidyUp() {
 	fmt.Println("Exited")
 }
 
-func newMainFrame(bind binding.UntypedList) *fyne.Container {
+func newMainFrame(bind models.State) *fyne.Container {
 	grid := container.New(layout.NewGridWrapLayout(fyne.Size{Width: 200, Height: 125}))
 
 	refresh := func() {
 		grid.Objects = nil
 
-		state, _ := bind.Get()
+		state, _ := bind.FilteredList.Get()
 		for _, item := range state {
 			if collection, ok := item.(models.Collection); ok {
 
@@ -79,7 +87,8 @@ func newMainFrame(bind binding.UntypedList) *fyne.Container {
 					for i, c := range featureCollection.Features {
 						items[i] = c
 					}
-					bind.Set(items)
+					bind.CompleteList.Set(items)
+					bind.FilteredList.Set(items)
 				})
 
 				stack := container.NewStack(button, label)
@@ -105,7 +114,7 @@ func newMainFrame(bind binding.UntypedList) *fyne.Container {
 		}
 	}
 
-	bind.AddListener(binding.NewDataListener(func() {
+	bind.FilteredList.AddListener(binding.NewDataListener(func() {
 		refresh()
 	}))
 
