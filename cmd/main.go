@@ -38,19 +38,19 @@ func main() {
 	inputBar.SetPlaceHolder("Enter text...")
 	inputBar.OnChanged = func(text string) {
 		stateBindings.Search.Set(text)
-		items := make([]interface{}, len(collections.Collections))
+		var items []any
 		completeList, _ := stateBindings.CompleteList.Get()
-		for index, element := range completeList {
+		for _, element := range completeList {
 			if collection, ok := element.(models.Collection); ok {
 				if strings.Contains(strings.ToLower(collection.Title), strings.ToLower(text)) {
-					items[index] = collection
+					items = append(items, collection)
 				}
 			}
 			if feature, ok := element.(models.Feature); ok {
 				assetKeys := slices.Sorted(maps.Keys(feature.Assets))
-				for indexAssets, assetKey := range assetKeys {
+				for _, assetKey := range assetKeys {
 					if strings.Contains(strings.ToLower(feature.Assets[assetKey].Title), strings.ToLower(text)) {
-						items[indexAssets] = feature
+						items = append(items, feature)
 					}
 				}
 
