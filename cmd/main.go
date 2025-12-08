@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"maps"
 	"slices"
+	"strings"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
@@ -11,7 +12,6 @@ import (
 	"fyne.io/fyne/v2/data/binding"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
-	"github.com/kglaus/geodienste-cli/pkg/gui"
 	"github.com/kglaus/geodienste-cli/pkg/stac"
 	"github.com/kglaus/geodienste-cli/pkg/stac/models"
 )
@@ -31,16 +31,32 @@ func main() {
 	contentBottom := newMainFrame(stateBindings)
 	contentBottomWrapper := container.NewVScroll(contentBottom)
 
-	var collectionObjects []fyne.CanvasObject
-
 	var collections models.Collections
 
 	// Search bar text
 	inputBar := widget.NewEntry()
 	inputBar.SetPlaceHolder("Enter text...")
 	inputBar.OnChanged = func(text string) {
-		contentBottom.Objects = gui.FilterCanvasObjects(collectionObjects, text)
-		contentBottom.Refresh()
+		stateBindings.Search.Set(text)
+		items := make([]interface{}, len(collections.Collections))
+		completeList, _ := stateBindings.CompleteList.Get()
+		for index, element := range completeList {
+			if collection, ok := element.(models.Collection); ok {
+				if strings.Contains(strings.ToLower(collection.Title), strings.ToLower(text)) {
+					items[index] = collection
+				}
+			}
+			if feature, ok := element.(models.Feature); ok {
+				assetKeys := slices.Sorted(maps.Keys(feature.Assets))
+				for indexAssets, assetKey := range assetKeys {
+					if strings.Contains(strings.ToLower(feature.Assets[assetKey].Title), strings.ToLower(text)) {
+						items[indexAssets] = feature
+					}
+				}
+
+			}
+		}
+		stateBindings.FilteredList.Set(items)
 	}
 
 	buttonGenerate := widget.NewButton("click me", func() {
