@@ -38,7 +38,7 @@ func main() {
 	inputBar.SetPlaceHolder("Enter text...")
 	inputBar.OnChanged = func(text string) {
 		stateBindings.Search.Set(text)
-		var items []any
+		items := make([]any, 0, len(collections.Collections))
 		completeList, _ := stateBindings.CompleteList.Get()
 		for _, element := range completeList {
 			if collection, ok := element.(models.Collection); ok {
