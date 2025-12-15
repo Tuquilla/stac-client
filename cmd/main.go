@@ -115,6 +115,7 @@ func newMainFrame(bind models.State) *fyne.Container {
 
 				assetKeys := slices.Sorted(maps.Keys(feature.Assets))
 				for _, assetKey := range assetKeys {
+					// TODO use assetKey as Title Title does not exist
 					label := widget.NewLabel(feature.Assets[assetKey].Title)
 					label.Wrapping = fyne.TextWrapWord
 

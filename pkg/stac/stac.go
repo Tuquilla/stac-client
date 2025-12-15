@@ -9,10 +9,12 @@ import (
 	"github.com/kglaus/geodienste-cli/pkg/stac/models"
 )
 
-const baseUrl string = "https://geodienste.ch/stac/collections"
+const baseUrl string = "https://geodienste.ch/stac"
+
+//const baseUrl string = "https://data.geo.admin.ch/api/stac/v1"
 
 func GetCollections() models.Collections {
-	resp, err := http.Get(baseUrl)
+	resp, err := http.Get(baseUrl + "/collections")
 	if err != nil {
 		fmt.Println("Error calling service")
 	}
