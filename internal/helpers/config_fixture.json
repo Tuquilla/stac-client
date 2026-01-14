@@ -1,0 +1,3 @@
+{
+  "baseUrls": ["https://geodienste.ch/stac", "https://data.geo.admin.ch/api/stac/v1"]
+}

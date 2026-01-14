@@ -6,19 +6,21 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/kglaus/geodienste-cli/pkg/stac/models"
+	"github.com/kglaus/geodienste-cli/internal/stac/models"
 )
 
-const baseUrl string = "https://geodienste.ch/stac"
+func GetCollections(baseUrl string) models.Collections {
+	if baseUrl == "" {
+		var collections models.Collections
+		return collections
+	}
 
-//const baseUrl string = "https://data.geo.admin.ch/api/stac/v1"
-
-func GetCollections() models.Collections {
 	resp, err := http.Get(baseUrl + "/collections")
+	defer resp.Body.Close()
+
 	if err != nil {
 		fmt.Println("Error calling service")
 	}
-	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
@@ -26,21 +28,21 @@ func GetCollections() models.Collections {
 	}
 
 	collections := createCollections(body)
-
 	return collections
 }
 
 func GetItems(itemUrl string) models.FeatureCollection {
 	resp, err := http.Get(itemUrl)
+	defer resp.Body.Close()
 	if err != nil {
 		fmt.Println("Error calling service")
 	}
-	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println("Error reading Response Body")
 	}
+
 	featureCollection := createFeatureCollection(body)
 	return featureCollection
 }
