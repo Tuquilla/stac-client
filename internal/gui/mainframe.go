@@ -1,7 +1,6 @@
 package gui
 
 import (
-	"fmt"
 	"maps"
 	"slices"
 
@@ -64,10 +63,7 @@ func NewMainFrame(bind models.State, myWindow fyne.Window) *container.Scroll {
 					label.Wrapping = fyne.TextWrapWord
 
 					button := widget.NewButton("", func() {
-						// TODO Remove Printf
-						fmt.Printf("call %s\n", feature.Assets[assetKey].Href)
-						// Save assets
-						helpers.SaveAsset()
+						helpers.SaveAsset(feature.Assets[assetKey])
 					})
 
 					stack := container.NewStack(button, label)

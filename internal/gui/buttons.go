@@ -8,7 +8,7 @@ import (
 )
 
 func NewStacButton(bind models.State, selectEntry *widget.SelectEntry, myWindow fyne.Window) *widget.Button {
-	buttonGenerate := widget.NewButton("Search", func() {
+	buttonGenerate := widget.NewButton("Get Collections", func() {
 		go func() {
 			collections, err := stac.GetCollections(selectEntry.Text)
 			fyne.Do(func() {

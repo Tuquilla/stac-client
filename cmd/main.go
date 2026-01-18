@@ -31,17 +31,20 @@ func main() {
 	// Mainframe
 	contentBottomWrapper := gui.NewMainFrame(stateBindings, myWindow)
 
-	// Searchbar
+	// Search bar
 	searchBar := gui.NewSearchBar(stateBindings)
 
 	// Select entry
 	selectEntry := gui.NewSelectEntry(selectOptions)
 
+	// Dir bar
+	dirBar := gui.NewDirBar()
+
 	// Stac button
 	buttonGenerate := gui.NewStacButton(stateBindings, selectEntry, myWindow)
 
 	// Arrange widgets
-	contentTop := container.New(layout.NewGridLayout(2), buttonGenerate, searchBar, selectEntry)
+	contentTop := container.New(layout.NewGridLayout(2), selectEntry, buttonGenerate, searchBar, dirBar)
 	content := container.NewBorder(contentTop, nil, nil, nil, contentBottomWrapper)
 
 	myWindow.SetContent(content)

@@ -6,12 +6,13 @@ import (
 	"strings"
 
 	"fyne.io/fyne/v2/widget"
+	"github.com/kglaus/stac-client/internal/helpers"
 	"github.com/kglaus/stac-client/internal/stac/models"
 )
 
 func NewSearchBar(bind models.State) *widget.Entry {
 	searchBar := widget.NewEntry()
-	searchBar.SetPlaceHolder("Search Assets")
+	searchBar.SetPlaceHolder("Search in Assets")
 	searchBar.OnChanged = func(text string) {
 		bind.Search.Set(text)
 		completeList, _ := bind.CompleteList.Get()
@@ -42,4 +43,12 @@ func NewSelectEntry(selectOptions []string) *widget.SelectEntry {
 	// Preselect first option
 	selectEntry.Text = selectOptions[0]
 	return selectEntry
+}
+
+func NewDirBar() *widget.Entry {
+	dirBar := widget.NewEntry()
+	_, assetRootPath := helpers.OperatingSystem()
+	dirBar.Text = assetRootPath
+	// TODO implement this path for saving assets
+	return dirBar
 }
