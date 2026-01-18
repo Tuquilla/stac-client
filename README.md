@@ -9,6 +9,11 @@ Basic implementation of a local running stac browser.
 go run ./cmd
 ```
 
+## Build
+```bash
+go build -ldflags "-H windowsgui" -o <name.exe> ./cmd
+```
+
 ## Requirements
 
 A C compiler is necessary to run the code (e.g. `gcc`).
