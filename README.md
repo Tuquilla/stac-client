@@ -10,6 +10,7 @@ go run ./cmd
 ```
 
 ## Build
+### Windows
 ```bash
 go build -ldflags "-H windowsgui" -o <name.exe> ./cmd
 ```
